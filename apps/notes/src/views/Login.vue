@@ -5,8 +5,9 @@
       <input class="first-input" type="text" placeholder="Username">
       <br>
       <input type="password" placeholder="Password">
+      <p v-if="hasErr" class="error-msg">Password or Username wrong.</p>
       <br>
-      <button class="login-btn">Log In</button>
+      <button @click="submit" class="login-btn">Log In</button>
       <button @click="moveToSignup" class="signup-btn">Sign Up</button>
     </form>
   </div>
@@ -21,10 +22,11 @@ export default defineComponent({
     return {
       email: "",
       password: "",
+      hasErr: false,
     };
   },
   methods: {
-    signup(submitEvent: any) {
+    submit() {
       // this.email = submitEvent.target.elements.email.value;
       // this.password = submitEvent.target.elements.password.value;
       // const auth = getAuth();
@@ -50,18 +52,15 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .container {
-  width: 100%;
-  height: 100vh;
   background: linear-gradient(56deg, #40e49a, #5f75aa);
-  position: absolute;
-  box-sizing: border-box;
-  padding: 6%;
-  transition: all 0.5s ease-in-out;
-  z-index: 11;
+  display: flex;
+  justify-content: center;
+  height: 100%;
 
   form {
+    margin-top: 6%;
     margin-left: 20px;
     color: #fff;
     display: block;
@@ -76,7 +75,6 @@ export default defineComponent({
       font-weight: bold;
       display: block;
     }
-
 
     input {
       margin-top: 30px;
