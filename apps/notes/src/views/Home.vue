@@ -5,10 +5,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
-import TextArea from '../components/TextArea.vue'
-
+import TextArea from '../components/TextArea.vue';
 
 export default defineComponent({
   name: 'Home',
@@ -17,20 +16,20 @@ export default defineComponent({
   },
   data() {
     return {
-      markdown: "",
-      showHtml: true
+      markdown: '',
+      showHtml: true,
     };
   },
   methods: {
-    updateMarkdown(note) {
-      this.markdown = note
-    }
+    updateMarkdown(note: string) {
+      this.markdown = note;
+    },
   },
   computed: {
     markdownToHtml() {
       return this.md(this.markdown);
-    }
-  }
+    },
+  },
 });
 </script>
 

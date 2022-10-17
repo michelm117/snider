@@ -4,7 +4,7 @@ import router from './router';
 import { marked } from 'marked';
 const markedMixin = {
   methods: {
-    md: function (input: string) {
+    md: (input: string) => {
       return marked(input);
     },
   },
