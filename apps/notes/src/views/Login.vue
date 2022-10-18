@@ -1,32 +1,46 @@
 <template>
   <div class="container">
-    <form>
+    <form @submit.prevent="submit">
       <a href="">Log In</a>
-      <input class="first-input" type="text" placeholder="Username">
-      <br>
-      <input type="password" placeholder="Password">
+      <input
+        class="first-input"
+        type="email"
+        placeholder="email"
+        v-model="email"
+      />
+      <br />
+      <input type="password" placeholder="Password" v-model="password" />
       <p v-if="hasErr" class="error-msg">Password or Username wrong.</p>
-      <br>
-      <button @click="submit" class="login-btn">Log In</button>
+      <br />
+      <button class="login-btn">Log In</button>
       <button @click="moveToSignup" class="signup-btn">Sign Up</button>
     </form>
   </div>
-
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import UserService from '../services/user.service';
 
 export default defineComponent({
   data() {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       hasErr: false,
     };
   },
   methods: {
-    submit() {
+    submit(e: any) {
+      UserService.login(this.email, this.password)
+        .then((res: any) => {
+          console.log(res);
+        })
+        .catch((e: Error) => {
+          console.log(e);
+        });
+      e.preventDefault();
+
       // this.email = submitEvent.target.elements.email.value;
       // this.password = submitEvent.target.elements.password.value;
       // const auth = getAuth();
@@ -46,7 +60,7 @@ export default defineComponent({
       //   });
     },
     moveToSignup() {
-      this.$router.push("/signup");
+      this.$router.push('/signup');
     },
   },
 });
