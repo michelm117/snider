@@ -43,13 +43,13 @@ export default defineComponent({
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 21px;
-  background: #232935;
   color: #fbfbfb;
   padding: 5px 10px;
   height: 100%;
   width: 100%;
   max-width: 100vw;
   min-width: 50vw;
+  min-height: 100vh;
   overflow-wrap: break-word;
 }
 </style>

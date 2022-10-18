@@ -112,7 +112,6 @@ export default defineComponent({
   font-family: 'Inconsolata', monospace;
   font-size: 16px;
   line-height: 21px;
-  background: #282a3a;
   padding: 20px 10px;
 
   width: 100%;
@@ -132,7 +131,6 @@ export default defineComponent({
   margin: 0;
   text-align: left;
   border: 0;
-  background: #282a3a;
   color: #fff;
 
   outline: none;

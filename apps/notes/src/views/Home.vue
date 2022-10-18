@@ -46,18 +46,20 @@
     <MarkdownEditor
       v-if="mode === Mode.Edit || mode === Mode.Split"
       :class="{
-        'full-screen': mode === Mode.Edit,
+        'texteditor-full-screen': mode === Mode.Edit,
         texteditor: mode === Mode.Split,
       }"
       @noteUpdated="onTextChange"
-      class="texteditor"
     >
     </MarkdownEditor>
     <!-- <Panel></Panel> -->
     <HtmlPanel
       v-if="mode === Mode.Read || mode === Mode.Split"
       v-bind:markdownText="markdown"
-      :class="{ 'full-screen': mode === Mode.Read }"
+      :class="{
+        'html-panel-full-screen': mode === Mode.Read,
+        'html-panel': mode === Mode.Split,
+      }"
     ></HtmlPanel>
   </div>
 </template>
@@ -121,6 +123,9 @@ export default defineComponent({
   grid-template-rows: 50px 1fr;
   grid-template-columns: 200px 1fr 1fr;
   background-color: #232935;
+  background: url('../assets/bg_2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .notes-tree {
   height: 100%;
@@ -158,11 +163,14 @@ export default defineComponent({
     }
   }
 }
-
-.texteditor-split {
+.html-panel {
+  background: #232935;
+}
+.texteditor {
   height: 100%;
   grid-row: 2 / 3;
   grid-column: 2;
+  background: #282a3a;
 }
 
 .full-screen {
@@ -172,12 +180,13 @@ export default defineComponent({
   width: 50vw;
 }
 
-.html-panel-split {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  grid-row: 2 / 3;
-  grid-column: 3;
+.html-panel-full-screen {
+  @extend .full-screen;
+  background: #2329358c;
+}
+.texteditor-full-screen {
+  @extend .full-screen;
+  background: #282a3aa8;
 }
 </style>
 
