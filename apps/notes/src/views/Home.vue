@@ -99,9 +99,9 @@ export default defineComponent({
       return this.cachedMarkdown;
     },
     changeMode() {
-      // if (this.markdown) {
-      //   this.cachedMarkdown = this.markdown;
-      // }
+      if (this.markdown) {
+        this.cachedMarkdown = this.markdown;
+      }
       switch (this.mode) {
         case Mode.Edit:
           this.mode = Mode.Read;
