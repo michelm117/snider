@@ -91,17 +91,11 @@ export default defineComponent({
   },
   methods: {
     onTextChange(markdown: string) {
-      if (markdown) {
-        this.markdown = markdown;
-        this.cachedMarkdown = this.markdown;
-        return this.markdown;
-      }
-      return this.cachedMarkdown;
+      this.markdown = markdown;
+      this.cachedMarkdown = this.markdown;
+      return this.markdown;
     },
     changeMode() {
-      if (this.markdown) {
-        this.cachedMarkdown = this.markdown;
-      }
       switch (this.mode) {
         case Mode.Edit:
           this.mode = Mode.Read;
