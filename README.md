@@ -13,7 +13,7 @@ MIT
 
 ## Screenshots
 <p float="left">
-  <img src="./docs/img/screenshot_1" width="400" />
-  <img src="./docs/img/screenshot_2" width="400" />
-  <img src="./docs/img/screenshot_3" width="400" />
+  <img src="./docs/img/screenshot_1.png" width="400" />
+  <img src="./docs/img/screenshot_2.png" width="400" />
+  <img src="./docs/img/screenshot_3.png" width="400" />
 </p>
