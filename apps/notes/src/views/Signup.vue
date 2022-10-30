@@ -1,64 +1,121 @@
 <template>
   <div class="container">
-    <form>
+    <form @submit.prevent="submit">
       <a href="">Sign Up</a>
-      <input v-model="email" class="first-input" type="email" placeholder="Email">
+      <input
+        v-model="email"
+        class="first-input"
+        type="email"
+        placeholder="Email"
+      />
       <p v-if="emailHasErr" class="error-msg">Email is required.</p>
+      <p v-if="emailAlreadyInUse" class="error-msg">Email already in use.</p>
 
-      <input v-model="username" type="text" placeholder="Username">
+      <input v-model="username" type="text" placeholder="Username" />
       <p v-if="usernameHasErr" class="error-msg">Username is required.</p>
 
-      <input v-model="password" type="password" placeholder="Password">
-      <p v-if="passdHasErr" class="error-msg">Password is required.</p>
+      <input v-model="password" type="password" placeholder="Password" />
+      <p v-if="passwdHasErr" class="error-msg">Password is required.</p>
 
-      <input v-model="confirmPassword" type="password" placeholder="Confirm Password">
+      <input
+        v-model="confirmPassword"
+        type="password"
+        placeholder="Confirm Password"
+      />
       <p v-if="confPasswdHasErr" class="error-msg">Password does not match.</p>
 
       <button @click="submit" class="signup">Sign Up</button>
       <button class="login" @click="moveToLogin">Log In</button>
+      <br />
+      <p v-if="serverErr" class="error-msg">{{ serverErr }}</p>
     </form>
   </div>
-
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
+import { defineComponent } from 'vue';
+import UserService from '../services/user.service';
 
 export default defineComponent({
   data() {
     return {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
       emailHasErr: false,
       usernameHasErr: false,
-      passdHasErr: false,
+      passwdHasErr: false,
       confPasswdHasErr: false,
+      emailAlreadyInUse: false,
+      serverErr: '',
     };
   },
   methods: {
-    submit() {
-      // this.email = submitEvent.target.elements.email.value;
-      // this.password = submitEvent.target.elements.password.value;
-      // const auth = getAuth();
-      // signInWithEmailAndPassword(auth, this.email, this.password)
-      //   .then(() => {
-      //     this.$router.push("/dashboard");
-      //   })
-      //   .catch((error) => {
-      //     const errorCode = error.code;
-      //     const errorMessage = error.message;
-      //     console.log(errorCode);
-      //     console.log(errorMessage);
-      //     let alert_1 = document.querySelector("#alert_1");
-      //     alert_1.classList.remove("d-none");
-      //     alert_1.innerHTML = errorMessage;
-      //     console.log(alert_1);
-      //   });
+    async submit(e: any) {
+      e.preventDefault();
+
+      if (this.hasInputError()) {
+        return;
+      }
+
+      await UserService.register(this.email, this.username, this.password)
+        .then((res) => {
+          if (res.data.status === 409) {
+            this.emailAlreadyInUse = true;
+            return;
+          }
+
+          this.$router.push('/login');
+        })
+        .catch((err: any) => {
+          console.error(err);
+
+          if (err instanceof AxiosError) {
+            if (err.response?.data.message) {
+              console.log(err.response?.data.message);
+              this.serverErr = err.response?.data.message.join(', ');
+            }
+          }
+        });
     },
     moveToLogin() {
-      this.$router.push("/login");
+      this.$router.push('/login');
+    },
+    hasInputError() {
+      if (!this.confirmPassword) {
+        this.passwdHasErr = true;
+      }
+      if (!this.username) {
+        this.usernameHasErr = true;
+      }
+      if (!this.confirmPassword) {
+        this.passwdHasErr = true;
+      }
+      if (!this.email) {
+        this.emailHasErr = true;
+      }
+      if (this.password !== this.confirmPassword) {
+        this.confPasswdHasErr = true;
+      }
+
+      if (
+        this.emailHasErr ||
+        this.passwdHasErr ||
+        this.usernameHasErr ||
+        this.confPasswdHasErr
+      ) {
+        return true;
+      }
+
+      this.emailHasErr = false;
+      this.emailAlreadyInUse = false;
+      this.passwdHasErr = false;
+      this.usernameHasErr = false;
+      this.confPasswdHasErr = false;
+
+      return false;
     },
   },
 });
@@ -70,7 +127,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   height: 100%;
-
 
   form {
     margin-top: 6%;
@@ -102,7 +158,6 @@ export default defineComponent({
       color: #fff;
       padding-left: 10px;
     }
-
 
     .first-input {
       margin-top: 60px;
