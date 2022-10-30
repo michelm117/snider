@@ -42,7 +42,7 @@ export class UsersService {
    * @throws {EntityNotFoundError} - when entity was not found
    * @returns {Promise<User | null>} user
    */
-  async findOneById(id: number): Promise<User | null> {
+  async findOneByIdOrFail(id: number): Promise<User | null> {
     if (!id && id !== 0) {
       throw new InternalServerErrorException('Id is undefined');
     }
@@ -60,7 +60,7 @@ export class UsersService {
    * @throws {EntityNotFoundError} - when entity was not found
    * @returns {Promise<User | null>} user
    */
-  async findOneByEmail(email: string): Promise<User | null> {
+  async findOneByEmailOrFail(email: string): Promise<User | null> {
     if (!email) {
       throw new InternalServerErrorException('Email is undefined');
     }
@@ -72,7 +72,7 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     currentUser: UserInterface
   ) {
-    const userToUpdate = await this.findOneById(id);
+    const userToUpdate = await this.findOneByIdOrFail(id);
     if (!userToUpdate) {
       return;
     }
@@ -87,7 +87,7 @@ export class UsersService {
     refreshToken: string,
     currentUser: UserInterface
   ) {
-    const userToUpdate = await this.findOneById(id);
+    const userToUpdate = await this.findOneByIdOrFail(id);
     if (!userToUpdate) {
       return;
     }
@@ -101,7 +101,7 @@ export class UsersService {
   }
 
   async remove(id: number, currentUser: UserInterface) {
-    const userToDelete = await this.findOneById(id);
+    const userToDelete = await this.findOneByIdOrFail(id);
 
     const ability = this.abilityFactory.defineAbility(currentUser);
     ForbiddenError.from(ability).throwUnlessCan(Action.Update, userToDelete);

@@ -30,7 +30,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Req() req: ExtendedRequest, @Param('id') id: string) {
-    const user = await this.usersService.findOneById(+id);
+    const user = await this.usersService.findOneByIdOrFail(+id);
     // const ability = this.abilityFactory.defineAbility(req.user);
     // ForbiddenError.from(ability).throwUnlessCan(Action.Read, user);
     return user;

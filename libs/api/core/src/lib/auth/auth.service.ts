@@ -10,7 +10,6 @@ import {
 } from '@snider/api-interfaces';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/entities/user.entity';
 import { EntityNotFoundError } from 'typeorm';
 
 @Injectable()
@@ -23,7 +22,7 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto) {
     try {
-      const userExists = await this.usersService.findOneByEmail(
+      const userExists = await this.usersService.findOneByEmailOrFail(
         createUserDto.email
       );
       if (userExists) {
