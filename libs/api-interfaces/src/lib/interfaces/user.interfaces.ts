@@ -14,6 +14,6 @@ export interface UserInterface extends PublicUserInterface {
   notes: NoteInterface[];
 }
 
-export interface CreateUserDtoInterface extends Partial<PublicUserInterface> {
+export interface CreateUserDtoInterface extends PublicUserInterface {
   password: string;
 }

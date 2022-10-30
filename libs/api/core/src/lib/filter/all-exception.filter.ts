@@ -7,6 +7,7 @@ import {
   HttpStatus,
   ForbiddenException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { EntityNotFoundError } from 'typeorm';
@@ -47,6 +48,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       error = exc.getResponse()['message'];
     } else if (exception instanceof EntityNotFoundError) {
       const exc = new NotFoundException();
+      httpStatus = exc.getStatus();
+      // httpStatus = exception.getStatus();
+      message = exception.message;
+      error = exc.getResponse()['message'];
+    } else if (exception instanceof Error) {
+      const exc = new BadRequestException();
       httpStatus = exc.getStatus();
       // httpStatus = exception.getStatus();
       message = exception.message;

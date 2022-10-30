@@ -1,12 +1,10 @@
-import { CreateUserDtoInterface, NoteInterface } from '@snider/api-interfaces';
+import { CreateUserDtoInterface } from '@snider/api-interfaces';
 import {
-  IsArray,
   IsEmail,
   IsNotEmpty,
   IsString,
   MaxLength,
   MinLength,
-  ValidateIf,
 } from 'class-validator';
 
 export class CreateUserDto implements CreateUserDtoInterface {

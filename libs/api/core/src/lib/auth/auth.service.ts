@@ -11,6 +11,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
+import { EntityNotFoundError } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -21,11 +22,17 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    const userExists = await this.usersService.findOneByEmail(
-      createUserDto.email
-    );
-    if (userExists) {
-      throw new ConflictException('User with given email already exists');
+    try {
+      const userExists = await this.usersService.findOneByEmail(
+        createUserDto.email
+      );
+      if (userExists) {
+        throw new ConflictException('User with given email already exists');
+      }
+    } catch (err: any) {
+      if (!(err instanceof EntityNotFoundError)) {
+        return err;
+      }
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
