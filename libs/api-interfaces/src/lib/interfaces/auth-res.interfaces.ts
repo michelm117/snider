@@ -1,3 +1,3 @@
-export interface loginResInterface {
+export interface LoginResInterface {
   accessToken: string;
 }

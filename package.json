@@ -44,7 +44,10 @@
     "turndown": "^7.1.1",
     "typeorm": "^0.3.10",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-resource": "^1.5.3",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.1.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^9.0.0",
@@ -64,6 +67,7 @@
     "@types/marked": "^4.0.7",
     "@types/node": "16.11.7",
     "@types/passport-local": "^1.0.34",
+    "@types/vue-resource": "^1.3.6",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "@vue/cli-plugin-typescript": "~4.5.0",

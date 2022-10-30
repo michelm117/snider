@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <NotesTree class="notes-tree"></NotesTree>
+    <NotesTree @fetchNoteById="onNoteSelect" class="notes-tree"></NotesTree>
 
     <div class="toolbar">
       <button>
@@ -44,7 +44,8 @@
     </div>
 
     <MarkdownEditor
-      v-if="mode === Mode.Edit || mode === Mode.Split"
+      ref="markdownEditor"
+      v-show="mode === Mode.Edit || mode === Mode.Split"
       :class="{
         'texteditor-full-screen': mode === Mode.Edit,
         texteditor: mode === Mode.Split,
@@ -69,6 +70,7 @@ import { defineComponent } from 'vue';
 import MarkdownEditor from '../components/MarkdownEditor.vue';
 import HtmlPanel from '../components/HtmlPanel.vue';
 import NotesTree from '../components/NotesTree.vue';
+import NoteService from '../services/notes.service';
 
 enum Mode {
   Read,
@@ -109,6 +111,16 @@ export default defineComponent({
           this.mode = Mode.Edit;
           break;
       }
+    },
+    async onNoteSelect(id: number) {
+      await NoteService.get(id)
+        .then((res: any) => {
+          this.markdown = res.data;
+          (this.$refs['markdownEditor'] as any).setNote(res.data);
+        })
+        .catch((err: any) => {
+          console.log(err.data);
+        });
     },
   },
   computed: {},

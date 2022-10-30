@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { Action, UserInterface } from '@snider/api-interfaces';
 import { User } from '../users/entities/user.entity';
 import {
@@ -22,21 +23,20 @@ export class UserAbilityFactory {
       PureAbility<[Action, Subjects]>
     >(PureAbility as AbilityClass<AppAbility>);
 
-    if (user.isAdmin) {
-      can(Action.Manage, 'all');
-    } else {
-      can(Action.Read, User);
+    can(Action.Read, User);
+    cannot(Action.Update, User, { id: { $ne: user.id } }).because(
+      'User can only read there own note'
+    );
 
-      can(Action.Update, User);
-      cannot(Action.Update, User, { id: { $ne: user.id } }).because(
-        'User can only update there own user'
-      );
+    can(Action.Update, User);
+    cannot(Action.Update, User, { id: { $ne: user.id } }).because(
+      'User can only update there own note'
+    );
 
-      can(Action.Delete, User);
-      cannot(Action.Delete, User, { id: { $ne: user.id } }).because(
-        'User can only delete there own user'
-      );
-    }
+    can(Action.Delete, User);
+    cannot(Action.Delete, User, { id: { $ne: user.id } }).because(
+      'User can only delete there own user'
+    );
 
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

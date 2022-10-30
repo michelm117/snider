@@ -9,22 +9,10 @@
         <a href=""> <font-awesome-icon icon="fa-solid fa-book" /> all notes </a>
 
         <ul>
-          <li>
-            <a href="">
-              <font-awesome-icon icon="fa-solid fa-sticky-note" /> ToDo</a
-            >
-            <!-- <span>28.09.2020</span> -->
-          </li>
-          <li>
-            <a href="">
-              <font-awesome-icon icon="fa-solid fa-sticky-note" /> Projects
-            </a>
-            <!-- <span>28.09.2020</span> -->
-          </li>
-          <li>
-            <a href="">
+          <li v-for="note in noteInfos" :key="note.id">
+            <a v-on:click.prevent="selectNote(note.id)">
               <font-awesome-icon icon="fa-solid fa-sticky-note" />
-              Einkaufliste
+              {{ note.name }}
             </a>
             <!-- <span>28.09.2020</span> -->
           </li>
@@ -36,10 +24,37 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import NoteService from '../services/notes.service';
+import {
+  LoginResInterface,
+  NoteInfoInterface,
+} from '../../../../libs/api-interfaces/src';
+import AuthService from '../services/auth.service';
+import tokenService from '../services/token.service';
 
 export default defineComponent({
   name: 'NotesTree',
-  methods: {},
+  data() {
+    return {
+      noteInfos: new Array<NoteInfoInterface>(),
+    };
+  },
+  methods: {
+    async fetchNoteInfos() {
+      await NoteService.getAllNotesInfos()
+        .then((res: any) => {
+          this.noteInfos = res.data;
+        })
+        .catch((err: any) => {});
+    },
+    selectNote(id: number) {
+      this.$emit('fetchNoteById', id);
+    },
+  },
+
+  async mounted() {
+    await this.fetchNoteInfos();
+  },
 });
 </script>
 

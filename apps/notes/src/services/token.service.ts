@@ -1,14 +1,24 @@
+import Vuex from 'vuex';
 import jwt from 'jsonwebtoken';
+import { store } from '../store';
 
 class TokenService {
-  private token = '';
+  getToken() {
+    return store.getters.getToken;
+  }
 
   setToken(token: string) {
-    this.token = token;
+    store.dispatch('updateToken', token);
   }
 
   hasToken(): boolean {
-    return !this.token ? false : true;
+    if (!this.getToken()) {
+      return false;
+    }
+    if (this.getToken() === '') {
+      return false;
+    }
+    return true;
   }
 
   verify(): boolean {
@@ -16,7 +26,7 @@ class TokenService {
       return false;
     }
 
-    const decoded = jwt.decode(this.token, { complete: true });
+    const decoded = jwt.decode(this.getToken(), { complete: true });
     if (!decoded) {
       return false;
     }

@@ -5,13 +5,24 @@
     <div class="line-numbers">
       <span v-for="i in lineNbr" :key="i"></span>
     </div>
-    <div
+
+    <textarea
+      class="textarea"
+      name="textarea"
+      id=""
+      cols="30"
+      @keydown.tab.prevent="insertTab($event)"
+      v-model="textNote"
+      @input="onInput"
+    ></textarea>
+    <!-- <div
       contenteditable
       class="textarea"
-      @input="onInput"
       @keydown.tab.prevent="insertTab($event)"
       ref="root"
-    ></div>
+    ></div> -->
+
+    />
   </div>
 </template>
 
@@ -23,7 +34,7 @@ export default defineComponent({
   data() {
     return {
       tabLength: 2,
-      lineNbr: 1,
+      lineNbr: 2,
       textNote: '',
     };
   },
@@ -65,22 +76,20 @@ export default defineComponent({
       return position;
     },
     onInput(e: any) {
-      this.textNote = e.target.innerText;
-      this.$emit('noteUpdated', this.textNote);
-
-      this.countLineNbr(this.textNote);
+      this.$emit('noteUpdated', e.target.value);
+      this.countLineNbr(e.target.value);
     },
     countLineNbr(text: string) {
       text = text.replace(/\n/g, '<br>');
-      text = text.replace(/<br><br>/g, '<br>');
+      // text = text.replace(/<br><br>/g, '<br>');
 
-      const lastBreak = text.slice(text.length - 4);
+      // const lastBreak = text.slice(text.length - 4);
 
-      if (lastBreak !== '<br>') {
-        text += '<br>';
-      }
+      // if (lastBreak !== '<br>') {
+      //   text += '<br>';
+      // }
 
-      this.lineNbr = text.split('<br>').length;
+      this.lineNbr = text.split('<br>').length + 1;
       return this.lineNbr;
     },
     insertTab(event: any) {
@@ -95,6 +104,9 @@ export default defineComponent({
       //   textarea.value.substring(0, start) +
       //   ' '.repeat(this.tabLength) +
       //   textarea.value.substring(end);
+    },
+    setNote(data: string) {
+      this.textNote = data;
     },
   },
 
@@ -126,12 +138,12 @@ export default defineComponent({
   max-width: 100vw;
   min-width: 20vw;
   line-height: 21px;
-  overflow-y: hidden;
   padding: 0;
   margin: 0;
   text-align: left;
   border: 0;
   color: #fff;
+  background-color: transparent;
 
   outline: none;
   resize: none;

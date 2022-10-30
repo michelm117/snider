@@ -10,7 +10,7 @@
       />
       <br />
       <input type="password" placeholder="Password" v-model="password" />
-      <p v-if="hasErr" class="error-msg">Password or Username wrong.</p>
+      <p v-if="hasErr" class="error-msg">{{ error }}</p>
       <br />
       <button class="login-btn">Log In</button>
       <button @click="moveToSignup" class="signup-btn">Sign Up</button>
@@ -19,45 +19,59 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import { defineComponent } from 'vue';
-import UserService from '../services/user.service';
+import AuthService from '../services/auth.service';
+import TokenService from '../services/token.service';
 
 export default defineComponent({
   data() {
     return {
-      email: '',
-      password: '',
+      email: 'marc@michel.lu',
+      password: 'marcmarcmarc',
       hasErr: false,
+      error: 'Password or Username wrong.',
     };
   },
   methods: {
-    submit(e: any) {
-      UserService.login(this.email, this.password)
-        .then((res: any) => {
-          console.log(res);
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
+    async submit(e: any) {
       e.preventDefault();
 
-      // this.email = submitEvent.target.elements.email.value;
-      // this.password = submitEvent.target.elements.password.value;
-      // const auth = getAuth();
-      // signInWithEmailAndPassword(auth, this.email, this.password)
-      //   .then(() => {
-      //     this.$router.push("/dashboard");
+      // await axios
+      //   .post('http://localhost:3333/api/auth/login', {
+      //     password: 'marcmarcmarc',
+      //     email: 'marc@michel.lu',
       //   })
-      //   .catch((error) => {
-      //     const errorCode = error.code;
-      //     const errorMessage = error.message;
-      //     console.log(errorCode);
-      //     console.log(errorMessage);
-      //     let alert_1 = document.querySelector("#alert_1");
-      //     alert_1.classList.remove("d-none");
-      //     alert_1.innerHTML = errorMessage;
-      //     console.log(alert_1);
+      //   .then((res: any) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err: any) => {
+      //     console.error(err);
       //   });
+
+      await AuthService.login(this.email, this.password)
+        .then((res: any) => {
+          const payload = res.data;
+          if (!payload.accessToken) {
+            throw new Error('No access token is response found');
+          }
+
+          TokenService.setToken(payload.accessToken);
+          this.$router.push('/');
+        })
+        .catch((err: any) => {
+          if (axios.isAxiosError(err)) {
+            const res = err?.response;
+            if (res) {
+              if (res.status === 401) {
+                this.hasErr = true;
+                this.error = 'Password or Username wrong.';
+                console.error(res.statusText);
+              }
+            }
+          }
+          console.error(err);
+        });
     },
     moveToSignup() {
       this.$router.push('/signup');
@@ -101,6 +115,13 @@ export default defineComponent({
       outline: none;
       color: #fff;
       padding-left: 10px;
+    }
+
+    .error-msg {
+      color: rgb(158, 0, 0);
+      margin: 0;
+      margin-top: 12px;
+      padding: 0;
     }
 
     .first-input {

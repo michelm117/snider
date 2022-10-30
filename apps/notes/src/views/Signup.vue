@@ -35,7 +35,7 @@
 <script lang="ts">
 import { AxiosError } from 'axios';
 import { defineComponent } from 'vue';
-import UserService from '../services/user.service';
+import AuthService from '../services/auth.service';
 
 export default defineComponent({
   data() {
@@ -60,7 +60,7 @@ export default defineComponent({
         return;
       }
 
-      await UserService.register(this.email, this.username, this.password)
+      await AuthService.register(this.email, this.username, this.password)
         .then((res) => {
           if (res.data.status === 409) {
             this.emailAlreadyInUse = true;

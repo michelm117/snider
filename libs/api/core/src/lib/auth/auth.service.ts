@@ -11,6 +11,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { EntityNotFoundError } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
     return createdUser;
   }
 
-  async login(@Req() req: ExtendedRequest, user: UserInterface) {
+  async login(@Req() req: ExtendedRequest, user: User) {
     const accessToken = this.generateAccessToken(user.id);
     const refreshTokenCookie = await this.generateRefreshToken(user);
     // const dummyCookie = this.generateDummyCookie();
@@ -72,7 +73,7 @@ export class AuthService {
    * @param {number} id
    * @returns {string} cookie with refresh token.
    */
-  async generateRefreshToken(user: UserInterface) {
+  async generateRefreshToken(user: User) {
     const payload: CreateJwtPayloadInterface = {
       userId: user.id,
     };
@@ -98,7 +99,8 @@ export class AuthService {
     const sameSite = 'lax';
     const path = '/';
     const maxAge = this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME');
-    const cookie = `Authentication=${token}; Max-Age=${maxAge}; Path=${path}; SameSite=${sameSite}; Domain=${domain}; HttpOnly; Secure`;
+    // const cookie = `Authentication=${token}; Max-Age=${maxAge}; Path=${path}; SameSite=${sameSite}; Domain=${domain}; HttpOnly; Secure`;
+    const cookie = `Authentication=${token}; Max-Age=${maxAge}; Path=${path}; SameSite=${sameSite}; Domain=${domain}; Secure;`;
     return cookie;
   }
 }

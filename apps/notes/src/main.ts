@@ -1,6 +1,7 @@
-import { createApp } from 'vue';
+import Vue, { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import VueResource from 'vue-resource';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -28,6 +29,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { faReadme } from '@fortawesome/free-brands-svg-icons';
+import { store } from './store';
 
 /* add icons to the library */
 library.add(
@@ -52,4 +54,5 @@ library.add(
 createApp(App)
   .component('font-awesome-icon', FontAwesomeIcon)
   .use(router)
+  .use(store)
   .mount('#app');

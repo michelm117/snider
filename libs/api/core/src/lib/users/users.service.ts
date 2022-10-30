@@ -67,44 +67,36 @@ export class UsersService {
     return await this.usersRepository.findOneByOrFail({ email });
   }
 
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-    currentUser: UserInterface
-  ) {
+  async update(id: number, updateUserDto: UpdateUserDto, currentUser: User) {
     const userToUpdate = await this.findOneByIdOrFail(id);
     if (!userToUpdate) {
       return;
     }
 
-    const ability = this.abilityFactory.defineAbility(currentUser);
-    ForbiddenError.from(ability).throwUnlessCan(Action.Update, userToUpdate);
     return await this.usersRepository.update({ id: id }, { ...updateUserDto });
   }
 
   async updateRefreshToken(
     id: number,
     refreshToken: string,
-    currentUser: UserInterface
+    currentUser: User
   ) {
     const userToUpdate = await this.findOneByIdOrFail(id);
     if (!userToUpdate) {
       return;
     }
 
-    const ability = this.abilityFactory.defineAbility(currentUser);
-    ForbiddenError.from(ability).throwUnlessCan(Action.Update, userToUpdate);
     return await this.usersRepository.update(
       { id: id },
       { hashedRefreshToken: refreshToken }
     );
   }
 
-  async remove(id: number, currentUser: UserInterface) {
+  async remove(id: number, currentUser: User) {
     const userToDelete = await this.findOneByIdOrFail(id);
 
-    const ability = this.abilityFactory.defineAbility(currentUser);
-    ForbiddenError.from(ability).throwUnlessCan(Action.Update, userToDelete);
+    // const ability = this.abilityFactory.defineAbility(currentUser);
+    // ForbiddenError.from(ability).throwUnlessCan(Action.Update, userToDelete);
 
     return await this.usersRepository.remove(userToDelete);
   }

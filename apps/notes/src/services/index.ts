@@ -1,2 +1,1 @@
-export * from './user.service';
-export * from './http-common';
+export * from './auth.service';
