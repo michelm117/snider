@@ -13,6 +13,7 @@ import {
   DatabaseModule,
   UsersModule,
 } from '@snider/api/core';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { NotesModule } from 'libs/api/core/src/lib/notes/notes.module';
 
 @Module({
